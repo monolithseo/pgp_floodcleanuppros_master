@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="/sitemaps_xsl.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<url>
+<loc>/dark-mode-test/</loc>
+<lastmod>2025-06-27T12:57:46-06:00</lastmod></url>
+<url>
+<loc>/tailwind-plus/</loc>
+<lastmod>2025-06-19T11:00:47-06:00</lastmod></url>
+<url>
+<loc>/daisyui-test/</loc>
+<lastmod>2025-06-19T10:14:24-06:00</lastmod></url>
+<url>
+<loc>/test-2/</loc>
+<lastmod>2025-06-19T09:17:10-06:00</lastmod></url>
+<url>
+<loc>/</loc>
+<lastmod>2025-05-24T12:15:18-06:00</lastmod></url>
+<url>
+<loc>/flowbite/</loc>
+<lastmod>2025-05-04T22:49:35-06:00</lastmod></url>
+<url>
+<loc>/states/</loc>
+<lastmod>2024-12-25T00:00:21-07:00</lastmod></url>
+<url>
+<loc>/cities/</loc>
+<lastmod>2024-12-25T00:00:11-07:00</lastmod></url></urlset>
