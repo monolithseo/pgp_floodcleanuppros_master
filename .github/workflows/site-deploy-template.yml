@@ -15,6 +15,11 @@ on:
         required: true
         description: 'Token to access master repo'
 
+# Add permissions for private repo access
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
