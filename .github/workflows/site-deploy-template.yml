@@ -1,0 +1,81 @@
+name: Site Deploy Template
+on:
+  workflow_call:
+    inputs:
+      source_folder:
+        required: true
+        type: string
+        description: 'Source folder path from master repo root (e.g., cities/water-damage-restoration-aventura-fl)'
+      target_repo:
+        required: true  
+        type: string
+        description: 'Target repository to deploy to'
+    secrets:
+      MASTER_REPO_TOKEN:
+        required: true
+        description: 'Token to access master repo'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.target_repo }}
+          token: ${{ secrets.MASTER_REPO_TOKEN }}
+          
+      - name: Clear existing site content (except .git and .github)
+        run: |
+          # Remove everything except .git and .github
+          find . -maxdepth 1 ! -name '.' ! -name '.git' ! -name '.github' -exec rm -rf {} + 2>/dev/null || true
+          
+      - name: Checkout master repo
+        uses: actions/checkout@v4
+        with:
+          repository: monolithseo/pgp_floodcleanuppros_master
+          token: ${{ secrets.MASTER_REPO_TOKEN }}
+          path: master-repo
+          
+      - name: Copy shared WordPress assets
+        run: |
+          # Copy wp-content and wp-includes
+          cp -r master-repo/wp-content ./wp-content 2>/dev/null || echo "wp-content not found"
+          cp -r master-repo/wp-includes ./wp-includes 2>/dev/null || echo "wp-includes not found"
+          
+      - name: Copy site-specific content
+        run: |
+          # Copy everything from the specified source folder
+          cp -r master-repo/${{ inputs.source_folder }}/* ./ 2>/dev/null || echo "Source folder not found"
+          
+      - name: Process HTML for deployment
+        run: |
+          # Replace source folder paths with root paths in HTML files
+          find . -name "*.html" -type f -exec sed -i 's|/${{ inputs.source_folder }}/|/|g' {} \; 2>/dev/null || true
+          
+      - name: Clean up build artifacts
+        run: |
+          # Remove .DS_Store files everywhere
+          find . -name ".DS_Store" -type f -delete 2>/dev/null || true
+          # Remove the cloned master repo
+          rm -rf master-repo
+          
+      - name: Show deployed site structure
+        run: |
+          echo "Deployed site from: ${{ inputs.source_folder }}"
+          echo "Files in root directory:"
+          ls -la
+          echo "Site structure:"
+          find . -maxdepth 2 -type d | head -20
+          
+      - name: Commit and deploy site
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to deploy"
+          else
+            git commit -m "Deploy site from: ${{ inputs.source_folder }} - $(date)"
+            git push
+          fi
